@@ -1,0 +1,17 @@
+using System;
+using System.Threading;
+
+namespace HelloWorldApp
+{
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            while (true)
+            {
+                Console.WriteLine("Hello, World!");
+                Thread.Sleep(1000); // Pausa de 1 segundo para evitar spam excessivo
+            }
+        }
+    }
+}
