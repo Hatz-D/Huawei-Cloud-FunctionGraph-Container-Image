@@ -9,7 +9,11 @@ namespace src
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
+            int variavel = 0;
+            for (int i = 0; i < 10; i++) {
+            variavel++;
+        }
+
         }
         public Stream myFunc(Stream input,IFunctionContext context)
         {
