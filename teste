@@ -1,7 +1,4 @@
 using System;
-using System.Net;
-using System.Text;
-using System.Text.Json;
 
 namespace HelloWorldApp
 {
@@ -9,65 +6,11 @@ namespace HelloWorldApp
     {
         static void Main(string[] args)
         {
-            HttpListener listener = new HttpListener();
-            listener.Prefixes.Add("http://*:8000/");
-            listener.Start();
-            Console.WriteLine("HTTP Server listening on port 8000");
+            int variavel = 0;
 
-            while (true)
-            {
-                HttpListenerContext context = listener.GetContext();
-                HttpListenerRequest request = context.Request;
-                HttpListenerResponse response = context.Response;
-
-                if (request.HttpMethod == "POST" && request.Url.AbsolutePath == "/invoke")
-                {
-                    HandleInvoke(request, response);
-                }
-                else if (request.HttpMethod == "POST" && request.Url.AbsolutePath == "/init")
-                {
-                    HandleInit(request, response);
-                }
-                else
-                {
-                    response.StatusCode = (int)HttpStatusCode.NotFound;
-                    response.Close();
-                }
+            for (int i = 0; i < 10; i++) {
+                variavel++;
             }
-        }
-
-        private static void HandleInvoke(HttpListenerRequest request, HttpListenerResponse response)
-        {
-            var responseBody = new
-            {
-                isBase64Encoded = false,
-                statusCode = 200,
-                headers = new { ContentType = "application/json" },
-                body = "Invoke handler response"
-            };
-
-            string jsonResponse = JsonSerializer.Serialize(responseBody);
-            byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
-            response.ContentLength64 = buffer.Length;
-            response.OutputStream.Write(buffer, 0, buffer.Length);
-            response.OutputStream.Close();
-        }
-
-        private static void HandleInit(HttpListenerRequest request, HttpListenerResponse response)
-        {
-            var responseBody = new
-            {
-                isBase64Encoded = false,
-                statusCode = 200,
-                headers = new { ContentType = "application/json" },
-                body = "Init handler response"
-            };
-
-            string jsonResponse = JsonSerializer.Serialize(responseBody);
-            byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
-            response.ContentLength64 = buffer.Length;
-            response.OutputStream.Write(buffer, 0, buffer.Length);
-            response.OutputStream.Close();
         }
     }
 }
