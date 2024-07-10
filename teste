@@ -23,6 +23,6 @@ app.UseEndpoints(endpoints =>
     });
 });
 
-app.Run("http://localhost:8000");
+app.Run("http://*:8000");
 
 public partial class Program { }
