@@ -8,7 +8,7 @@ class Program
     static void Main(string[] args)
     {
         HttpListener listener = new HttpListener();
-        listener.Prefixes.Add("http://127.0.0.1:8000/");
+        listener.Prefixes.Add("http://*:8000/");
         listener.Start();
         Console.WriteLine("DotNet web server at port 8000 is running..");
 
