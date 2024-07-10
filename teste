@@ -1,13 +1,14 @@
 using System;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 
 class Program
 {
     static void Main(string[] args)
     {
         HttpListener listener = new HttpListener();
-        listener.Prefixes.Add("http://*:8000/");
+        listener.Prefixes.Add("http://127.0.0.1:8000/");
         listener.Start();
         Console.WriteLine("DotNet web server at port 8000 is running..");
 
@@ -16,10 +17,18 @@ class Program
             HttpListenerContext context = listener.GetContext();
             HttpListenerResponse response = context.Response;
 
-            string responseString = "<html><body><h2>This is DotNet HTTP function.</h2></body></html>";
-            byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+            var responseObject = new
+            {
+                isBase64Encoded = true,
+                statusCode = (int)HttpStatusCode.OK,
+                headers = new { ContentType = "text/html" },
+                body = "<html><body><h2>This is DotNet HTTP function.</h2></body></html>"
+            };
 
-            response.ContentType = "text/html";
+            string jsonResponse = JsonSerializer.Serialize(responseObject);
+            byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
+
+            response.ContentType = "application/json";
             response.ContentLength64 = buffer.Length;
 
             response.OutputStream.Write(buffer, 0, buffer.Length);
