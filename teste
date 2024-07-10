@@ -1,73 +1,31 @@
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using System;
-using System.Net;
-using System.Text;
 using System.Text.Json;
 
-namespace HelloWorldApp
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddControllers();
+
+var app = builder.Build();
+
+app.UseRouting();
+
+app.UseEndpoints(endpoints =>
 {
-    class Program
+    endpoints.MapPost("/{*path}", async context =>
     {
-        static void Main(string[] args)
-        {
-            HttpListener listener = new HttpListener();
-            listener.Prefixes.Add("http://*:8000/");
-            listener.Start();
-            Console.WriteLine("HTTP Server listening on port 8000");
+        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
+        using var reader = new StreamReader(context.Request.Body);
+        var body = await reader.ReadToEndAsync();
+        logger.LogInformation("Received: {Body}", body);
+        await context.Response.WriteAsync("Hello FunctionGraph, method POST");
+    });
+});
 
-            while (true)
-            {
-                HttpListenerContext context = listener.GetContext();
-                HttpListenerRequest request = context.Request;
-                HttpListenerResponse response = context.Response;
+app.Run("http://localhost:8000");
 
-                if (request.HttpMethod == "POST" && request.Url.AbsolutePath == "/invoke")
-                {
-                    HandleInvoke(request, response);
-                }
-                else if (request.HttpMethod == "POST" && request.Url.AbsolutePath == "/init")
-                {
-                    HandleInit(request, response);
-                }
-                else
-                {
-                    response.StatusCode = (int)HttpStatusCode.NotFound;
-                    response.Close();
-                }
-            }
-        }
-
-        private static void HandleInvoke(HttpListenerRequest request, HttpListenerResponse response)
-        {
-            var responseBody = new
-            {
-                isBase64Encoded = false,
-                statusCode = 200,
-                headers = new { ContentType = "application/json" },
-                body = "Invoke handler response"
-            };
-
-            string jsonResponse = JsonSerializer.Serialize(responseBody);
-            byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
-            response.ContentLength64 = buffer.Length;
-            response.OutputStream.Write(buffer, 0, buffer.Length);
-            response.OutputStream.Close();
-        }
-
-        private static void HandleInit(HttpListenerRequest request, HttpListenerResponse response)
-        {
-            var responseBody = new
-            {
-                isBase64Encoded = false,
-                statusCode = 200,
-                headers = new { ContentType = "application/json" },
-                body = "Init handler response"
-            };
-
-            string jsonResponse = JsonSerializer.Serialize(responseBody);
-            byte[] buffer = Encoding.UTF8.GetBytes(jsonResponse);
-            response.ContentLength64 = buffer.Length;
-            response.OutputStream.Write(buffer, 0, buffer.Length);
-            response.OutputStream.Close();
-        }
-    }
-}
+public partial class Program { }
