@@ -1,28 +1,29 @@
-using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
-using System.IO;
-using System.Threading.Tasks;
+using System;
+using System.Net;
+using System.Text;
 
-var builder = WebApplication.CreateBuilder(args);
-
-var app = builder.Build();
-
-app.UseRouting();
-
-app.UseEndpoints(endpoints =>
+class Program
 {
-    endpoints.MapPost("/{*path}", async context =>
+    static void Main(string[] args)
     {
-        var logger = context.RequestServices.GetRequiredService<ILogger<Program>>();
-        using var reader = new StreamReader(context.Request.Body);
-        var body = await reader.ReadToEndAsync();
-        logger.LogInformation("Received: {Body}", body);
-        await context.Response.WriteAsync("Hello FunctionGraph, method POST");
-    });
-});
+        HttpListener listener = new HttpListener();
+        listener.Prefixes.Add("http://127.0.0.1:8000/");
+        listener.Start();
+        Console.WriteLine("DotNet web server at port 8000 is running..");
 
-app.Run("http://*:8000");
+        while (true)
+        {
+            HttpListenerContext context = listener.GetContext();
+            HttpListenerResponse response = context.Response;
 
-public partial class Program { }
+            string responseString = "<html><body><h2>This is DotNet HTTP function.</h2></body></html>";
+            byte[] buffer = Encoding.UTF8.GetBytes(responseString);
+
+            response.ContentType = "text/html";
+            response.ContentLength64 = buffer.Length;
+
+            response.OutputStream.Write(buffer, 0, buffer.Length);
+            response.Close();
+        }
+    }
+}
