@@ -16,6 +16,9 @@ RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-p
 RUN dpkg -i packages-microsoft-prod.deb
 RUN rm packages-microsoft-prod.deb
 
+ENV TZ=Asia/Dubai
+RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+
 RUN apt-get update && apt-get install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0 ca-certificates git
 
 RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
