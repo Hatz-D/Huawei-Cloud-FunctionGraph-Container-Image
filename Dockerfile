@@ -10,11 +10,7 @@ RUN mkdir -m 550 ${HOME} && groupadd -g ${GROUP_ID} ${GROUP_NAME} && useradd -u 
 
 RUN cd ${HOME}
 
-RUN apt-get install -y gpg
-
-RUN gpg --keyserver keyserver.ubuntu.com --recv-keys 871920D1991BC93C
-
-RUN gpg --export --armor 871920D1991BC93C | sudo apt-key add - 
+RUN sudo chmod a+r /usr/share/keyrings/docker-archive-keyring.gpg
 
 RUN apt-get update && apt-get install -y dotnet8 ca-certificates git
 
