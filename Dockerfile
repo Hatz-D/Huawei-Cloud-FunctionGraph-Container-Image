@@ -10,6 +10,8 @@ RUN mkdir -m 550 ${HOME} && groupadd -g ${GROUP_ID} ${GROUP_NAME} && useradd -u 
 
 RUN cd ${HOME}
 
+RUN apt-get install -y gpg
+
 RUN gpg --keyserver keyserver.ubuntu.com --recv-keys 871920D1991BC93C
 
 RUN gpg --export --armor 871920D1991BC93C | sudo apt-key add - 
