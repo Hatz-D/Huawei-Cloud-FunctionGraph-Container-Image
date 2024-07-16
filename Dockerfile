@@ -1,4 +1,4 @@
-FROM ubuntu:24.04
+FROM ubuntu:20.04
 
 ENV HOME=/home/appuser
 ENV GROUP_ID=1003
