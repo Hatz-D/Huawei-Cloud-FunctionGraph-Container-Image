@@ -10,8 +10,6 @@ RUN mkdir -m 550 ${HOME} && groupadd -g ${GROUP_ID} ${GROUP_NAME} && useradd -u 
 
 RUN cd ${HOME}
 
-RUN chmod a+r /usr/share/keyrings/docker-archive-keyring.gpg
-
 RUN apt-get update && apt-get install -y dotnet8 ca-certificates git
 
 RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
