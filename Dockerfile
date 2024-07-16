@@ -10,7 +10,11 @@ RUN mkdir -m 550 ${HOME} && groupadd -g ${GROUP_ID} ${GROUP_NAME} && useradd -u 
 
 RUN cd ${HOME}
 
-RUN apt-get update && apt-get install -y dotnet8 ca-certificates git
+RUN wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb
+RUN dpkg -i packages-microsoft-prod.deb
+RUN rm packages-microsoft-prod.deb
+
+RUN apt-get update && apt-get install -y dotnet-sdk-8.0 aspnetcore-runtime-8.0 ca-certificates git
 
 RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 
