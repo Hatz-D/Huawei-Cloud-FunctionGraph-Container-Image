@@ -10,7 +10,8 @@ RUN mkdir -m 550 ${HOME} && groupadd -g ${GROUP_ID} ${GROUP_NAME} && useradd -u 
 
 RUN cd ${HOME}
 
-RUN apt-get update && apt-get install -y dotnet8 ca-certificates git
+#RUN apt-get update && apt-get install -y dotnet8 ca-certificates git
+RUN apt-get install -y dotnet8 ca-certificates git
 
 RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 
