@@ -29,7 +29,7 @@ RUN git clone https://github.com/Hatz-D/Huawei-Cloud-FunctionGraph-Container-Ima
 
 RUN rm -f HelloWorldApp/Program.cs
 
-RUN cp Huawei-Cloud-FunctionGraph-Container-Image/source-code /HelloWorldApp/Program.cs
+RUN cp Huawei-Cloud-FunctionGraph-Container-Image/source-code.net /HelloWorldApp/Program.cs
 
 RUN rm -rf Huawei-Cloud-FunctionGraph-Container-Image
 
