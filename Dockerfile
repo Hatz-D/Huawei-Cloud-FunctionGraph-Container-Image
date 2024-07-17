@@ -21,8 +21,6 @@ RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 
 RUN apt-get update && apt-get install -y dotnet-sdk-8.0 ca-certificates git
 
-RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
-
 RUN dotnet new web -n HelloWorldApp
 
 RUN cd HelloWorldApp
@@ -37,7 +35,7 @@ RUN rm -rf Huawei-Cloud-FunctionGraph-Container-Image
 
 RUN mv HelloWorldApp /home/appuser
 
-RUN chown -R appuser:appuser /home/appuser
+RUN chown -R ${USER_ID}:${GROUP_ID} ${HOME}
 
 USER appuser
 
