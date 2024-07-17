@@ -27,13 +27,13 @@ RUN dotnet new web -n HelloWorldApp
 
 RUN cd HelloWorldApp
 
-RUN git clone https://github.com/Hatz-D/Teste.git
+RUN git clone https://github.com/Hatz-D/Huawei-Cloud-FunctionGraph-Container-Image.git
 
 RUN rm -f HelloWorldApp/Program.cs
 
-RUN cp Teste/teste /HelloWorldApp/Program.cs
+RUN cp Huawei-Cloud-FunctionGraph-Container-Image/source-code /HelloWorldApp/Program.cs
 
-RUN rm -rf Teste
+RUN rm -rf Huawei-Cloud-FunctionGraph-Container-Image
 
 RUN mv HelloWorldApp /home/appuser
 
@@ -46,5 +46,3 @@ WORKDIR /
 EXPOSE 8000
 
 ENTRYPOINT ["dotnet", "run", "--project", "/home/appuser/HelloWorldApp/HelloWorldApp.csproj"]
-
-#CMD dotnet run --project /home/appuser/HelloWorldApp/HelloWorldApp.csproj
